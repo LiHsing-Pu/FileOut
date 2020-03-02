@@ -1,0 +1,36 @@
+﻿@using MPB.MTNET.EL.Web.DataContainer
+@using MPB.MTNET.MICS.MES.SSO;
+@{
+    string controllerName = ViewContext.RouteData.GetRequiredString("Controller");
+    string UrlName = string.Empty;
+    if (Session["UserID"] != null)
+    {
+        List<AccFunRes> AccFunResList = FunContainer.usersFun[Session["UserID"].ToString()];
+        AccFunRes accFunRes = AccFunResList.Where(o => o.FunUrl == null ? false : o.FunUrl.Contains(controllerName)).FirstOrDefault();
+        string funParent = string.Empty;
+        if (accFunRes != null)
+        {
+            UrlName = accFunRes.FunCname + "(" + accFunRes.FunCd + ")";
+            funParent = accFunRes.FunParent;
+
+            while (true)
+            {
+                accFunRes = AccFunResList.Where(o => o.FunUrl == null ? false : o.FunCd == funParent).FirstOrDefault();
+                if (accFunRes != null)
+                {
+                    funParent = accFunRes.FunParent;
+
+                    UrlName = accFunRes.FunCname + " > " + UrlName;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+<div class="crumbs">
+    <ul id="breadcrumbNavi" class="breadcrumbNavi">@UrlName</ul>
+</div>

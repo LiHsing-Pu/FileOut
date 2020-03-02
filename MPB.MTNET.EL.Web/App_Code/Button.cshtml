@@ -1,0 +1,264 @@
+﻿
+@helper ActionLink(string Action, string Controllers, string Areas, string ID, string Val, string Css, IHtmlString Json)
+{
+    string actionName = string.Empty;
+    string parameter = string.Empty;
+
+    if (!string.IsNullOrEmpty(Areas))
+    {
+        actionName = "/" + Areas + "/" + Controllers + "/" + Action;
+    }
+    else
+    {
+        actionName = "/" + Controllers + "/" + Action;
+    }
+
+    actionName = actionName + "?";
+
+
+    if (Json.ToString() == "null")
+    {
+        <a id='@ID' name='@ID' href="@actionName" class='@Css'>@Val</a>
+    }
+    else
+    {
+        <a id='@ID' name='@ID' class='@Css'>@Val</a>
+
+        <script type="text/javascript">
+            var jsObject =@Json;
+            var id;
+            var val;
+            var parm="";
+            //for (var item in jsObject.search) {
+
+            //    id=item;
+            //    val=jsObject.search[item];
+            //    if (val==null||val=='') {
+            //        continue;
+            //    }
+
+            //    parm+="search."+id+"="+val+"&"
+
+
+            //}
+            for (var item in jsObject) {
+
+                id=item;
+                val=jsObject[item];
+                if (val==null||val=='') {
+                    continue;
+                }
+
+                parm +="searchModel."+id+"="+val+"&"
+
+
+            }
+            parm=parm.substring(0,parm.length-1);
+
+
+
+            var aa ='@actionName'+parm;
+
+            document.getElementById('@ID').setAttribute("href",aa)
+
+        </script>
+    }
+
+}
+
+
+@helper ActionButton(string Action, string Controllers, string Areas, string ID, string Val, string Css, string QueryParm)
+{
+    string actionName = string.Empty;
+    string parameter = string.Empty;
+
+    if (!string.IsNullOrEmpty(Areas))
+    {
+        actionName = "/" + Areas + "/" + Controllers + "/" + Action;
+    }
+    else
+    {
+        actionName = "/" + Controllers + "/" + Action;
+    }
+
+    actionName = actionName + QueryParm;
+
+
+    @*<a id='@ID' name='@ID' href='@actionName' class='@Css'>@Val</a>*@
+
+    <input id='@ID' name='@ID' class='@Css' type="button" value=@Val onclick="javascript:location.href='@actionName'" />
+}
+
+
+
+
+
+
+
+@helper ActionButton(string Action, string Controllers, string Areas, string ID, string Val, string Css, IHtmlString Json)
+{
+    string actionName = string.Empty;
+    string parameter = string.Empty;
+
+    if (!string.IsNullOrEmpty(Areas))
+    {
+        actionName = "/" + Areas + "/" + Controllers + "/" + Action;
+    }
+    else
+    {
+        actionName = "/" + Controllers + "/" + Action;
+    }
+
+    actionName = actionName + "?";
+
+
+    if (Json.ToString() == "null")
+    {
+        @*<a id='@ID' name='@ID' href="@actionName" class='@Css'>@Val</a>*@
+        <input id='@ID' name='@ID' class='@Css' type="button" value=@Val onclick="javascript:location.href='@actionName'" />
+    }
+    else
+    {
+        @*<a id='@ID' name='@ID' class='@Css'>@Val</a>*@
+        <input id='@ID' name='@ID' class='@Css' type="button" value=@Val onclick="javascript:location.href='@actionName'" />
+
+        <script type="text/javascript">
+            var jsObject =@Json;
+            var id;
+            var val;
+            var parm="";
+            //for (var item in jsObject.search) {
+
+            //    id=item;
+            //    val=jsObject.search[item];
+            //    if (val==null||val=='') {
+            //        continue;
+            //    }
+
+            //    parm+="search."+id+"="+val+"&"
+
+
+            //}
+            for (var item in jsObject) {
+
+                id=item;
+                val=jsObject[item];
+                if (val==null||val=='') {
+                    continue;
+                }
+
+                parm +="searchModel."+id+"="+val+"&"
+
+
+            }
+            parm=parm.substring(0,parm.length-1);
+
+
+
+            var aa ='@actionName'+parm;
+
+            //document.getElementById('@ID').setAttribute("href", aa)
+            document.getElementById('@ID').setAttribute("onclick","javascript:location.href='"+aa+"'");
+
+        </script>
+    }
+
+}
+
+
+@helper ActionLink(string Action, string Controllers, string Areas, string ID, string Val, string Css, string QueryParm)
+{
+    string actionName = string.Empty;
+    string parameter = string.Empty;
+
+    if (!string.IsNullOrEmpty(Areas))
+    {
+        actionName = "/" + Areas + "/" + Controllers + "/" + Action;
+    }
+    else
+    {
+        actionName = "/" + Controllers + "/" + Action;
+    }
+
+    actionName = actionName + QueryParm;
+
+
+    <a id='@ID' name='@ID' href='@actionName' class='@Css'>@Val</a>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@helper ActionLinkForTable(string Action, string Controllers, string Areas, string ID, string Val, string Css, IHtmlString Json, string GetParm)
+{
+
+
+
+    string actionName = string.Empty;
+    string parameter = string.Empty;
+
+    if (!string.IsNullOrEmpty(Areas))
+    {
+        actionName = "/" + Areas + "/" + Controllers + "/" + Action;
+    }
+    else
+    {
+        actionName = "/" + Controllers + "/" + Action;
+    }
+
+    if (!string.IsNullOrEmpty(GetParm))
+    {
+        actionName = actionName + "?" + GetParm;
+    }
+    else
+    {
+        actionName = actionName + "?";
+    }
+
+
+
+    if (Json.ToString() == "null")
+    {
+        <a id='@ID' name='@ID' href="@actionName" class="bs-tooltip" title="@Val"><i class='@Css'></i></a>
+    }
+    else
+    {
+        <a id='@ID' name='@ID' class="bs-tooltip" title="@Val"><i class='@Css'></i></a>
+
+        <script type="text/javascript">ActionLinkForTableFun(@Json,'@actionName','@ID');</script>
+    }
+
+}
+
+
+@helper ActionLinkForTable(string Action, string Controllers, string Areas, string ID, string Val, string Css, string QueryParm)
+{
+    string actionName = string.Empty;
+    string parameter = string.Empty;
+
+    if (!string.IsNullOrEmpty(Areas))
+    {
+        actionName = "/" + Areas + "/" + Controllers + "/" + Action;
+    }
+    else
+    {
+        actionName = "/" + Controllers + "/" + Action;
+    }
+
+    actionName = actionName + QueryParm;
+
+    <a id='@ID' name='@ID' href="@actionName" class="bs-tooltip" title="@Val"><i class='@Css'></i></a>
+
+}
+
+
+

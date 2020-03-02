@@ -1,0 +1,10 @@
+﻿
+@using Template.Web;
+@if (TempData.GetAlerts().Any())
+{
+    <script type="text/javascript">
+        $(function () {
+            $.Message.alertDialog("@String.Join("\\n", TempData.GetAlerts().Select(x => x.Message.ToString()))", "@String.Join("\\n", TempData.GetAlerts().Select(x => x.AlertClass.ToString()))");
+        });
+    </script>
+}

@@ -1,0 +1,23 @@
+﻿body {
+
+}
+@charset "utf-8";
+/*手冊編碼字體*/
+@font-face {
+	font-family: "OCR-B 10 BT";
+	src: url('@font-face/fc3b8143000f0e6f34aeb41dd1d410ba.eot');
+	src: url('@font-face/fc3b8143000f0e6f34aeb41dd1d410ba.eot?#iefix ') format('embedded-opentype'), /* IE6-IE8 */
+	url('@font-face/fc3b8143000f0e6f34aeb41dd1d410ba.woff2') format('woff2'), /* chrome、firefox */
+	url('@font-face/fc3b8143000f0e6f34aeb41dd1d410ba.woff') format('woff'), /* chrome、firefox */
+	url('@font-face/fc3b8143000f0e6f34aeb41dd1d410ba.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+	url('@font-face/fc3b8143000f0e6f34aeb41dd1d410ba.svg') format('svg'); /* iOS 4.1- */
+}
+
+.ocrb {
+	font-family: "OCR-B 10 BT" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-webkit-text-stroke-width: 0.2px;
+	-moz-osx-font-smoothing: grayscale;
+}

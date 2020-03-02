@@ -1,0 +1,268 @@
+﻿@using MPB.MTNET.EL.Parameter.ViewModel
+@using MPB.MTNET.EL.BusinessLogicLayer.Service
+
+@model EL010101ViewModel
+<style>
+    .Specialtext1 {
+        display: inline-block;
+        font-weight: normal;
+        color: #425367;
+        font-size: 16px;
+        width: 4%;
+    }
+
+    .Specialtext2 {
+        display: inline-block;
+        font-weight: normal;
+        color: #425367;
+        font-size: 16px;
+        width: 6%;
+    }
+
+    .Specialtext3 {
+        display: inline-block;
+        font-weight: normal;
+        color: #425367;
+        font-size: 16px;
+        width: 11%;
+    }
+</style>
+
+<div class="main">
+    <div class="block">
+        <div class="title">
+            查詢條件
+            @*<button id="button" class="ui-state-default ui-corner-all ty_open"></button>*@
+        </div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tb_style2">
+            <tbody>
+                @* 編碼 *@
+                <tr>
+                    <th scope="row">
+                        <div style="text-align:right">@Html.DisplayNameFor(o => o.searchModel.stringtype)&nbsp;&nbsp;</div>
+                    </th>
+                    <td>
+                        @Html.TextBoxFor(o => o.searchModel.stringtype, new { @class = "inputbox required" })
+                    </td>
+                    <th>
+                        &nbsp;&nbsp;
+                    </th>
+                    <td></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <ul class="btn_set">
+            <li><input type="button" value="查詢" onclick="Search();" /></li>
+            <li><input type="button" value="清除" onclick="Clean();" /></li>
+        </ul>
+    </div>
+
+
+    <div class="line"></div>
+    @*<input type="hidden" id="delunitcd" name="delunitcd" value="" />*@
+    <div class="block">
+        <div class="sub_tit">
+            查詢結果
+        </div>
+        <div class="block">
+            <table id="table"></table>
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        //var msg = new MessagerAlert();
+
+        $(function () {
+            //標頭
+            $('#breadcrumb').html('氣象資料');
+            $("#DetailTilte").html("資料查詢");
+
+            
+
+            //LoadData();
+
+            //var q1 = $("#searchModel_mtm_ps_idno").val();
+            //var q2 = $("#searchModel_mtm_sea_book_seq").val();
+            //var q3 = $("#searchModel_bmc_cert_cd option:selected").val();
+            //if (q1 != "" || q3 != "") {
+            //    LoadData();
+            //    return;
+            //}
+        });
+
+
+        function Search() {
+
+            LoadData();
+
+        }
+
+        function Clean() {
+            $('.inputbox').val(undefined);
+            //$('.selectbox').val(undefined);
+            //$('input[type=checkbox]').prop("checked", false);
+        }
+
+
+
+
+        function LoadData() {
+             var columns = [
+                {
+                    field: "No", title: "項次", formatter: function (value, row, index) { return index + 1; }
+                },
+                {
+                    field: "locationName", title: "locationName"
+                },
+                {
+                    field: "elementName", title: "elementName"
+                },
+                {
+                    field: "parameterName", title: "parameterName"
+                },
+                {
+                    field: "parameterUnit", title: "parameterUnit"
+                },
+                 {
+                     field: "parameterValue", title: "parameterValue"
+                 },
+                 {
+                     field: "startTime", title: "startTime", formatter: function (value, row, index) {
+                         return '<div style="text-align: right;">' + changeDateFormat(value) + '</div>';
+                     }
+                 },
+                 {
+                     field: "endTime", title: "endTime", formatter: function (value, row, index) {
+                         return '<div style="text-align: right;">' + changeDateFormat(value) + '</div>';
+                     }
+                 }
+                //{
+                //    field: "actions", title: "功能", formatter: "$.ClientSide.OperateFormatter", events: "$.ClientSide.OperateEvents"
+                //}
+            ]
+
+            GridSetup();
+            InitTable("table", "@Url.Action("Table")", "", columns, queryParams);
+        }
+
+        function queryParams(params) {
+            //var select = [];
+            //var strtmp="";
+            //$.each($("input[name='PostedRoleIds']:checked"), function () {
+            //    select.push($(this).val());
+            //    strtmp += "," + $(this).val() ;
+            //});
+            return {
+                limit: params.limit,
+                offset: params.offset,
+                searchModel: {
+                    stringtype: $('#searchModel_stringtype').val(),
+                    //SelectedRoles: select
+                }
+            };
+        }
+
+        function changeDateFormat(cellval) {
+            if (cellval != null) {
+                var date = new Date(parseInt(cellval.replace("/Date(", "").replace(")/", ""), 10));
+                var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+                var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+
+                var Hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                var Minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                var Seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+
+                return (date.getFullYear() - 1911) + "-" + month + "-" + currentDate + " " + Hour + ":" + Minutes + ":" + Seconds;
+            }
+        }
+
+       @*function AgreeFun() {
+           var delunitcd = $('#delunitcd').val();
+            //alert(txOP);
+
+            var form = $('<form></form>');
+            form.attr("method", "post");
+            form.attr("action", '@(Url.Action("Delete"))');
+
+           var vD1 = $('<input type="hidden" name="delunitcd" value="' + delunitcd + '"></input>');
+            form.append(vD1);
+
+            $(document.body).append(form);
+            form.submit();
+        }*@
+
+        //function CancelFun() {
+        //    //msg.WithError("取消");
+        //}
+
+        function GridSetup() {
+            $.ClientSide = {
+                OperateFormatter: function (value, row, index) {
+                    var subAdd;
+                    return ['<div class="td_btn">', $.ClientSide.ButtonLayout(row), subAdd, '</div>',].join('');
+                },
+                ButtonLayout: function (row) {
+                    return $.ClientSide.ServiceButtonLayout();
+                },
+                ServiceButtonLayout: function () {
+
+                    return '<a rel="tooltip" class="update" title="編輯" href="javascript:void(0)">編輯</a>';
+
+                },
+                OperateEvents: {
+                    'click .update': function (e, value, row, index) {
+                        //編輯新增框時會進來
+                        $.ClientSide.UpdateClick(e, value, row, index);
+                    }
+                    //'click .delete': function (e, value, row, index) {
+                    //    //編輯新增框時會進來
+                    //    $.ClientSide.DeleteClick(e, value, row, index);
+                    //}
+                },
+                UpdateClick: function (e, value, row, index) {
+                    $.ClientSide.CurrentRow = row;
+                    $.ClientSide.CurrentIndex = index;
+                    @*var paras = "";
+
+
+                    if (row.imm_professional_annual_contract_yyy != null) { paras += '&imm_professional_annual_contract_yyy=' + row.imm_professional_annual_contract_yyy; }
+                    if (row.imm_professional_training_unit_cd != null) { paras += '&imm_professional_training_unit_cd=' + row.imm_professional_training_unit_cd; }
+                    if (row.bmc_start_class_training_kind != null) { paras += '&bmc_start_class_training_kind=' + row.bmc_start_class_training_kind; }
+                    if (row.bmc_start_class_training_typecode != null) { paras += '&bmc_start_class_training_typecode=' + row.bmc_start_class_training_typecode; }
+                    if (row.bmc_training_class_code != null) { paras += '&bmc_training_class_code=' + row.bmc_training_class_code; }
+                    location.href = '@(Url.Action("Update"))?' + paras;*@
+                }
+
+            }
+        }
+
+
+        //function InitTable(name, url, uniqueId, columns, obj) {
+        //    $("#" + name + "").bootstrapTable('destroy');
+        //    $("#" + name + "").bootstrapTable({
+        //        toggle: "table",
+        //        url: url,
+        //        method: 'post',
+        //        //search: true,
+        //        queryParams: obj,
+        //        queryParamsType: 'limit',
+        //        sidePagination: "server",
+        //        //ajaxOptions: { id: id },
+        //        striped: true,                      //是否显示行间隔色
+        //        cache: false,
+        //        uniqueId: uniqueId,
+        //        pagination: true,                   //是否显示分页（*）
+        //        pageSize: 10,
+        //        pageList: [10, 20, 50, 100], //一頁顯示幾筆的選項
+        //        columns: columns
+        //    });
+        //};
+
+    </script>
+}

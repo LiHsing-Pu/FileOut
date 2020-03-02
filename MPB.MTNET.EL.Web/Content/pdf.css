@@ -1,0 +1,15 @@
+﻿#leftTd {
+    float: left;
+}
+
+body > table > tbody > tr > td > table > tbody > tr > th > div, body > table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > th > div {
+    color: midnightblue;
+}
+
+.content {
+    font-size: small;
+}
+
+.title {
+    font-size: large;
+}

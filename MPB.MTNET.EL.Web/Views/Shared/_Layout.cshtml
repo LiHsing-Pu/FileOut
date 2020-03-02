@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>測試</title>
+    @Styles.Render("~/Content/Theme")
+    @Styles.Render("~/Content/Plugins/Sweetalert2_CSS")
+    @Styles.Render("~/Content/Plugins/BootstrapTable_CSS")
+    @Styles.Render("~/Content/Plugins/JqueryUI_CSS")
+	@Styles.Render("~/Content/Plugins/Chosen_CSS") 
+	@Styles.Render("~/Content/Plugins/Select2_CSS")
+	
+    @{
+        string userName = string.Empty;
+        string depName = string.Empty;
+        if (Session.Keys.Count == 0)
+        {
+            //Response.Write("請重新登入。");
+            //Response.End();
+        }
+        else
+        {
+            if (Session["UserCname"] != null) { userName = Session["UserCname"].ToString(); };
+            if (Session["DeptCname"] != null) { depName = Session["DeptCname"].ToString(); };
+        }
+    }
+</head>
+<body>
+    <div id="WRAPPER">
+
+        <div id="CONTENT" style="margin-left:250px">
+
+
+
+            <!-- HEADER -->
+            <!--main -->
+            @RenderBody()
+            <div class="clr"></div>
+
+        </div>
+        <!-- CONTENT-->
+
+    </div>
+    <!-- WRAPPER-->
+    @Scripts.Render("~/Scripts/Plugins/Jquery")
+    @Scripts.Render("~/Scripts/Plugins/FileSaver")
+    @Scripts.Render("~/Scripts/Plugins/Sweetalert2_JS")
+    @Scripts.Render("~/Scripts/Plugins/JqueryDatepicker_JS")
+    @Scripts.Render("~/Scripts/Plugins/JqueryUI_JS")
+    @Scripts.Render("~/Scripts/Plugins/Bootstrap_JS")
+    @Scripts.Render("~/Scripts/Plugins/BootstrapTable_JS")
+
+    @Scripts.Render("~/Scripts/CustomScripts")
+	@Scripts.Render("~/Scripts/Plugins/Chosen_JS")
+    <script src="~/ThirdParty/plugins/jquery-datepicker/JQueryDatePickerTW.js"></script>
+	@Scripts.Render("~/Scripts/Plugins/Select2_JS")
+
+
+
+
+    @Html.Partial("_Alert")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+
+            $("form").validate();
+            countdownfunc();
+        })
+        $('.date-picker').datepickerTW({
+			changeYear: true, changeMonth: true, currentText: "Now"
+        });
+        //$('.datepickerTW').datepickerTW();
+        var countdownid;
+        function countdownfunc() {
+            var x = document.getElementById("countdown");
+            countdownid = setTimeout(countdownfunc, 1000);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ServerTime", "Home", new { Area = "" })',
+                dataType: "text",
+                success: function (time) {
+                    $("#countdown").html(time);
+                }
+            })
+
+        }
+        function ReTryToken() {
+
+        }
+
+
+    </script>
+</body>
+
+</html>
